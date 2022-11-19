@@ -1,0 +1,118 @@
+# Profeanu Ioana, 323CA
+# README file
+-------------------------------------------------------------------------------
+* Problem 1: Curatare
+  ~ Methods used: Shortest path with BFS, Heap's algorithm, and Backtracking
+  ~ Implementation:
+    ~ firstly, read the data and keep track of the accessible and inaccessible
+    cells of the board, using an arraylist of boolean arraylists, where the
+    value is true if the cell can be accessed, false otherwise; keep the robots and
+    dirty cells alongside with their indexes and coordinates in an arraylist;
+    ~ create an arraylist of arraylists, where each element is an object which
+    keeps track of the time it takes from all of the 4 dirts to reach the
+    current cell; the data structure is populated using BFS, in which for each
+    dirt, we check if we can go up, down, left or right (by checking, we make
+    sure the next cell is accessible and has not yet been visited) and change
+    the distance from the dirt to the cell; as in any typical BFS, we add the
+    recently visited cells in a queue;
+    ~ using the list of dirts, we generate all possible permutations using
+    Heap's algorithm;
+    ~ for each permutation, we generate all possible combinations of robots
+    that could be assigned to clean the dirts in the permutation; for that,
+    we use backtracking and create a list of robots (which can repeat) with the
+    same size as the permutation list;
+    ~ for the ith dirt in the permutation, calculate the total time it takes
+    the ith robot in the combinations list to clean it; after cleaning it,
+    change the robot's coordinates and check if the current time is greater
+    than the time it took to clean the other dirts in the same cleaning session;
+    the final maximum result will then be compared to a global minimum, because
+    we want to find the minimum maximum time in which all dirts are cleaned;
+  ~ Time complexity for solving the problem: O(S * N * M + S! * R!).
+  ~ Space complexity for solving the problem: O(N * M).
+-------------------------------------------------------------------------------
+* Problem 2: Fortificatii
+  ~ Method used: Dijkstra
+  ~ Implementation:
+    ~ the first step in solving the problem was to read the input data, by
+    creating an adjacency list for the graph, in each node storing the index
+    of the node and the time cost from its neighbor, and we also keep a
+    frequency-like arraylist of barbars, in which isBarbar.get(i) is true if
+    the ith city is occupied by barbars;
+    ~ before implementing Dijkstra's Algorithm, we create a class that imple-
+    ments Comparable and keeps track of a current's node index and time
+    from capital; then, using a priority queue we first add the capital, and
+    then until the queue is empty, we extract the first element, and for each
+    of its neighbors, if it is not barbar and the current time from the
+    capital is bigger, we update its time and add it to the priority
+    queue; this way, we only calculate the time from the capital to all
+    the unoccupied cities;
+    ~ for each city in the times arraylist, if its neighbor is barbar, we
+    add the total value from the capital to the barbar city to another array-
+    list, by adding the time from the barbar to its unoccupied neighbor city
+    to the neighbor's time from the capital; the arraylist of barbars time from
+    the capital then is sorted in ascending order;
+    ~ to get the minimum time from a barbars to capital by adding
+    the maximum number of fortifications available, in an arraylist we keep
+    the current minimum time(s) from the capital and the next minimum time,
+    and we try to make the minimum values the same as the next minimum by
+    adding fortifications and increasing the time; if there are not enough
+    fortifications available, we divide the available number by the number of
+    barbar roads we want to fortify; the result will be the minimum value of
+    the arraylist;
+    ~ Time complexity for solving the problem: O(M * logN).
+    ~ Space complexity for solving the problem: O(N * M).
+-------------------------------------------------------------------------------
+* Problem 3: Beamdrone
+  ~ Method used: Shortest Path in a Binary Weight Graph using a BFS like
+  algorithm
+  ~ Implementation:
+    ~ we first read the data and keep the racetrack cell data in an arraylist
+    of arraylists, where racetrack.get(i).get(j) has the value of 1 if the cell
+    from the ith line and jth column is an empty space, and 0 if it is a wall.
+    ~ the drone can move in two directions: horizontally and vertically. We
+    codify these two directions with false for vertically and true for horizon-
+    tally. We create an arraylist of arraylists similar to the racetrack, but
+    the values stored are Costs object: a Costs object contains two ints in
+    which we keep the current minimum cost for reaching the cell from the two
+    previously mentioned directions. The initial cost is inf. We also create
+    the CellData class which contains the data of a cell, with information such
+    as its coordinates, the current cost and the direction via which it was
+    visited.
+    ~ we use a deque data structure, in which we add to the front the elements
+    visited vertically, and to the back the elements visited horizontally. The
+    deque will contain objects of type CellData.
+    ~ we start with the start cell and in a while loop we deque the
+    cell from the front; then, we check if we can move in the same direction or
+    change the direction without leaving the track dimensions. Before changing
+    directions, we check if the next cell is empty, if the current cost (+1 if
+    we change directions) is lower than the cost the next cell has on that
+    direction; if so, we change the cost and add the new cell at the beginning
+    or at the end of the deque (depending on the direction).
+    ~ the minimum time until reaching the finish will be the minimum value of
+    the time consumed to reach it vertically and horizontally.
+  ~ Time complexity for solving the problem: O(N  + M), determined by the BFS
+  like minimum path search.
+  ~ Space complexity for solving the problem: O(N * M).
+-------------------------------------------------------------------------------
+* Problem 4: Curse
+  ~ Method used: Topological Sort using Khan's Algorithm
+  ~ Implementation:
+    ~ firstly, we read the data and then we create a graph (using adjacency
+    list) by having the following rule:
+        - for each line in the training matrix, we look for the first car
+        number that is different than the one just below it. This way, for the
+        same track we connect two different cars via a directed edge, where
+        the one from the upper training session scored a better time than the
+        one on the upper consecutive training (thus the edge starts from the
+        first car and ends with the second).
+    ~ we also calculate the internal degree of each node and keep it in an
+    arraylist, as it is compulsory for the topological sort.
+    ~ next, we sort the cars using Khan's algorithm, where we first add to a
+    queue the nodes with the internal degree 0, and until the queue is empty,
+    take the nodes one by one from the queue and for each of their neighbor,
+    we decrease the degree; if the degree is 0, we add it to the queue.
+  ~ Time complexity for solving the problem: O(N * A) both for reading the data
+  and for parsing the graph, and O(M + A - 1) for the topological sort, so the
+  overall complexity is O(A * (N + 1) + M).
+  ~ Space complexity for solving the problem: O(N * A).
+-------------------------------------------------------------------------------
